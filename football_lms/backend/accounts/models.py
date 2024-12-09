@@ -1,11 +1,12 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, authenticate, login as django_login, logout
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .serializers import CustomUserSerializer
 from .permissions import IsAdminOrCoachOrStaff  # Assuming this permission is defined elsewhere
+from django.shortcuts import render, redirect
 
 # Define the CustomUser model
 class CustomUser(AbstractUser):
@@ -27,7 +28,9 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)  # Don't save immediately
+            user.set_password(form.cleaned_data['password1'])  # Set the password correctly
+            user.save()  # Save the user to the database
             return redirect('accounts:login')  # Redirect to the login page after registration
     else:
         form = UserRegisterForm()
@@ -35,26 +38,46 @@ def register(request):
     return render(request, 'accounts/register.html', {'form': form})
 
 # Login view
-def login_view(request):
+def login(request):
+    if request.user.is_authenticated:
+        return redirect('accounts:profile', user_id=request.user.id)  # If already logged in, go to profile
+
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email')
+            username_or_email = form.cleaned_data.get('username_or_email')
             password = form.cleaned_data.get('password')
-            user = authenticate(request, email=email, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('home')  # Redirect to your home page or desired URL after login
+            user = None
+            if '@' in username_or_email:
+                user = CustomUser.objects.filter(email=username_or_email).first()
             else:
-                form.add_error(None, 'Invalid email or password')
+                user = CustomUser.objects.filter(username=username_or_email).first()
+            
+            if user and user.check_password(password):  # Ensure the password is correct
+                django_login(request, user)
+                return redirect('accounts:profile', user_id=user.id)  # Redirect to the user's profile page
+            else:
+                form.add_error(None, 'Invalid username/email or password')
     else:
         form = UserLoginForm()
+
     return render(request, 'accounts/login.html', {'form': form})
 
 # Logout view
 def logout_view(request):
     logout(request)  # Log out the user
     return redirect('accounts:login')  # Redirect to the login page after logout
+
+# Profile view (added as per request)
+def profile(request, user_id):
+    try:
+        user = CustomUser.objects.get(id=user_id)
+        # Ensure the logged-in user can only view their profile
+        if user != request.user:
+            return redirect('accounts:home')  # Redirect if trying to view someone else's profile
+        return render(request, 'accounts/profile.html', {'user': user})
+    except CustomUser.DoesNotExist:
+        return redirect('accounts:home')  # Redirect if user not found
 
 # CustomUser view set
 class CustomUserViewSet(viewsets.ModelViewSet):

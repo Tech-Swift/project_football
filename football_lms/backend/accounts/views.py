@@ -1,12 +1,15 @@
+import logging
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout  # Import the logout function
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from .models import CustomUser  # Import the CustomUser model first
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from .models import CustomUser  # Assuming CustomUser is your user model
+from django.contrib.auth import get_user_model
 from .serializers import CustomUserSerializer
 from .permissions import IsAdminOrCoachOrStaff  # Assuming this permission is defined elsewhere
 from .forms import UserRegisterForm, UserLoginForm
+
+# Create a logger
+logger = logging.getLogger(__name__)
 
 # Helper function to handle common errors and form submissions
 def handle_form_submission(request, form_class, success_redirect, template_name, error_message):
@@ -30,42 +33,87 @@ def register(request):
     return handle_form_submission(
         request,
         UserRegisterForm,
-        'login',  # Redirect to login page on successful registration
+        'accounts:login',  # Redirect to login page on successful registration
         'accounts/register.html',
         'Please correct the errors in the form'
     )
 
-# Login view
-def login(request):
+# Login view (Fixed)
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('accounts:profile', user_id=request.user.id)  # If already logged in, go to profile
+
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            user = authenticate(
-                request,
-                username=form.cleaned_data.get('username'),
-                password=form.cleaned_data.get('password')
-            )
-            if user:
-                login(request, user)
-                return redirect('home')  # Redirect to the home page on successful login
+            user = form.cleaned_data['user']  # Get the user instance from cleaned data
+
+            # Log the user in
+            auth_login(request, user)  # Use 'auth_login' to log the user in
+
+            # Redirect user based on their role
+            if user.groups.filter(name='Admin').exists():
+                return redirect('admin_dashboard')  # Redirect to the admin dashboard
+            elif user.groups.filter(name='Coach').exists():
+                return redirect('coach_dashboard')  # Redirect to the coach dashboard
+            elif user.groups.filter(name='Staff').exists():
+                return redirect('staff_dashboard')  # Redirect to the staff dashboard
             else:
-                return render(request, 'accounts/login.html', {'form': form, 'error': 'Invalid credentials'})
-        else:
-            return render(request, 'accounts/login.html', {'form': form, 'error': 'Please correct the errors in the form'})
+                return redirect('accounts:profile', user_id=user.id)  # Default fallback to user profile
+
     else:
         form = UserLoginForm()
+
     return render(request, 'accounts/login.html', {'form': form})
 
 # Logout view
-def logout(request):
-    logout(request)
+def logout_view(request):
+    auth_logout(request)
     return redirect('accounts:login')  # Redirect to login page after logout
 
-# CustomUser view set
+# Profile view
+@login_required
+def profile(request, user_id):
+    try:
+        user = CustomUser.objects.get(id=user_id)
+        if user != request.user:
+            return redirect('accounts:home')  # Redirect if trying to view someone else's profile
+        return render(request, 'accounts/profile.html', {'user': user})
+    except CustomUser.DoesNotExist:
+        return redirect('accounts:home')  # Redirect if user not found
+
+# Edit Profile view
+@login_required
+def edit_profile(request, user_id):
+    try:
+        user = CustomUser.objects.get(id=user_id)
+        if user != request.user:
+            return redirect('accounts:home')  # Redirect if trying to edit someone else's profile
+
+        if request.method == 'POST':
+            form = UserRegisterForm(request.POST, instance=user)  # Use your existing form for editing
+            if form.is_valid():
+                form.save()
+                return redirect('accounts:profile', user_id=user.id)
+        else:
+            form = UserRegisterForm(instance=user)
+
+        return render(request, 'accounts/edit_profile.html', {'form': form})
+    except CustomUser.DoesNotExist:
+        return redirect('accounts:home')  # Redirect if user not found
+
+# CustomUser view set (for API purposes)
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework import status
+from .serializers import CustomUserSerializer
+from .permissions import IsAdminOrCoachOrStaff  # Assuming this permission is defined elsewhere
+
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [IsAdminOrCoachOrStaff]
+    permission_classes = [IsAdminOrCoachOrStaff]  # Ensure that you have a custom permission defined
 
     @action(detail=True, methods=['post'], url_path='reset-password')
     def reset_password(self, request, pk=None):

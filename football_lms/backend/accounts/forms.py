@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from .models import CustomUser
 
@@ -13,10 +13,16 @@ class UserRegisterForm(forms.ModelForm):
         label="Confirm Password",
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password'}),
     )
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('coach', 'Coach'),
+        ('staff', 'Staff'),
+    ]
+    role = forms.ChoiceField(choices=ROLE_CHOICES, required=True, widget=forms.Select)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'role']
         widgets = {
             'password1': forms.PasswordInput(attrs={'placeholder': 'Password'}),
             'password2': forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}),
@@ -42,27 +48,44 @@ class UserRegisterForm(forms.ModelForm):
             raise ValidationError("Passwords do not match.")
         return password2
 
-class UserLoginForm(AuthenticationForm):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'password']
+    # Override the save method to hash the password
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        # Hash the password before saving
+        user.set_password(self.cleaned_data['password1'])
+        if commit:
+            user.save()
+        return user
+
+class UserLoginForm(forms.Form):
+    username_or_email = forms.CharField(label='Username or Email', max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
 
     def clean(self):
         cleaned_data = super().clean()
-        username = cleaned_data.get('username')
+        username_or_email = cleaned_data.get('username_or_email')
         password = cleaned_data.get('password')
 
         # Ensure both fields are filled out
-        if not username or not password:
-            raise ValidationError('Both username and password are required.')
+        if not username_or_email or not password:
+            raise ValidationError('Both username/email and password are required.')
 
-        # Check if user exists
-        user = CustomUser.objects.filter(username=username).first()
+        # Try to find the user by username or email
+        user = None
+        if '@' in username_or_email:
+            # If it looks like an email, search by email
+            user = CustomUser.objects.filter(email=username_or_email).first()
+        else:
+            # Otherwise, search by username
+            user = CustomUser.objects.filter(username=username_or_email).first()
+
         if not user:
-            raise ValidationError('No user found with this username.')
+            raise ValidationError('No user found with this username/email.')
 
         # Check if the password is correct
         if not user.check_password(password):
             raise ValidationError('Incorrect password. Please try again.')
 
+        # Return cleaned data if everything is fine
+        cleaned_data['user'] = user  # Store the user instance for use later
         return cleaned_data

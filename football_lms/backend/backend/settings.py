@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')  # For production
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -21,12 +21,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',  # Your custom app
-    'rest_framework',  # Django REST framework
-    'rest_framework_simplejwt'  # JWT library
+    'accounts',  # Custom app
+    'rest_framework',  # Django REST Framework
+    'rest_framework_simplejwt',  # JWT support
 ]
 
+# Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Add email-based authentication backend
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default backend (username/password)
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,16 +65,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
-# Configure to use SQLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # Using SQLite file database
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
 # Password validation
-# Enhanced password validation settings for security
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -88,52 +92,47 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+# Static files
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# For development, specify where Django should look for static files
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Ensure the static folder is in the root directory
-]
-
-# Don't need STATIC_ROOT for development, but it's used for production to collect static files
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Login and Logout Redirects
+LOGIN_REDIRECT_URL = '/accounts/profile/'  # Redirect after login
+LOGIN_URL = '/accounts/login/'            # URL for the login page
+LOGOUT_REDIRECT_URL = '/'                 # Redirect after logout
 
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',  # Use more restrictive permissions
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Use simplejwt for authentication
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # Use pagination for API responses
-    'PAGE_SIZE': 100,  # Default page size for paginated views
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
 }
 
-# Security settings for production
+# Simple JWT settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+}
+
+# Security settings
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 X_FRAME_OPTIONS = 'DENY'
 
-# Django REST Framework Simple JWT settings for enhanced security
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # Token lifetime
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),   # Refresh token lifetime
-    'AUTH_HEADER_TYPES': ('Bearer',),  # Only use Bearer tokens for authentication
-    'SIGNING_KEY': SECRET_KEY,  # Signing key for tokens
-    'VERIFYING_KEY': None,  # No key for verification (use default settings)
-    'ALGORITHM': 'HS256',  # Algorithm used for signing tokens
-    'USER_ID_FIELD': 'id',  # Field to identify the user in JWT payload
-    'USER_ID_CLAIM': 'user_id',  # Claim name for the user ID in JWT payload
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),  # Use default access token class
-}
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
