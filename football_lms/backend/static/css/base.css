@@ -1,0 +1,55 @@
+/* =========================
+   General Styles & Variables
+   ========================= */
+:root {
+    --primary-color: #36d1dc; /* Soft cyan */
+    --secondary-color: #5b86e5; /* Soft blue */
+    --gradient-color: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    --text-color: #333; /* Dark text color */
+    --bg-color: #f5f5f5; /* Light gray background */
+    --card-bg: rgba(255, 255, 255, 0.8); /* Semi-transparent card background */
+    --overlay-bg: rgba(0, 0, 0, 0.4); /* Dark overlay for better readability */
+    --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    --border-radius: 12px; /* Rounded corners */
+    --transition-speed: 0.3s; /* Smooth transitions */
+    --font-family: 'Poppins', sans-serif; /* Modern font family */
+    --padding: 12px; /* Default padding */
+}
+
+/* =========================
+   General Reset & Body Styling
+   ========================= */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    line-height: 1.6;
+    padding-top: 60px; /* For sticky navbar */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;  /* Ensures the body takes at least the full height of the viewport */
+}
+
+/* Utility Classes */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}

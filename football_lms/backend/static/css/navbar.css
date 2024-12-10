@@ -1,0 +1,41 @@
+/* =========================
+   Navbar Styling
+   ========================= */
+nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 1rem;
+    transition: color var(--transition-speed);
+}
+
+nav a:hover {
+    color: var(--secondary-color); /* Hover effect */
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        display: none;
+        gap: 1rem;
+    }
+
+    nav.open {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+        font-size: 2rem;
+        cursor: pointer;
+        color: var(--text-color);
+    }
+}

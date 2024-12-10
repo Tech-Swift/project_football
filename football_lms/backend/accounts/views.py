@@ -51,20 +51,44 @@ def login_view(request):
             # Log the user in
             auth_login(request, user)  # Use 'auth_login' to log the user in
 
-            # Redirect user based on their role
-            if user.groups.filter(name='Admin').exists():
-                return redirect('admin_dashboard')  # Redirect to the admin dashboard
-            elif user.groups.filter(name='Coach').exists():
-                return redirect('coach_dashboard')  # Redirect to the coach dashboard
-            elif user.groups.filter(name='Staff').exists():
-                return redirect('staff_dashboard')  # Redirect to the staff dashboard
+            # Check the user's group membership once and redirect accordingly
+            group = user.groups.first()  # Get the first group the user belongs to (if any)
+
+            if group:
+                if group.name == 'Admin':
+                    return redirect('accounts:admin_dashboard')  # Redirect to admin dashboard
+                elif group.name == 'Coach':
+                    return redirect('accounts:coach_dashboard')  # Redirect to coach dashboard
+                elif group.name == 'Staff':
+                    return redirect('accounts:staff_dashboard')  # Redirect to staff dashboard
+                else:
+                    return redirect('accounts:profile', user_id=user.id)  # Redirect to user profile if not in known groups
             else:
-                return redirect('accounts:profile', user_id=user.id)  # Default fallback to user profile
+                return redirect('accounts:profile', user_id=user.id)  # Default fallback if no group
 
     else:
         form = UserLoginForm()
 
     return render(request, 'accounts/login.html', {'form': form})
+
+# Dashboard views
+@login_required
+def admin_dashboard(request):
+    if request.user.groups.filter(name='Admin').exists():
+        return render(request, 'accounts/admin_dashboard.html')
+    return redirect('accounts:home')  # Redirect if not authorized
+
+@login_required
+def coach_dashboard(request):
+    if request.user.groups.filter(name='Coach').exists():
+        return render(request, 'accounts/coach_dashboard.html')
+    return redirect('accounts:home')  # Redirect if not authorized
+
+@login_required
+def staff_dashboard(request):
+    if request.user.groups.filter(name='Staff').exists():
+        return render(request, 'accounts/staff_dashboard.html')
+    return redirect('accounts:home')  # Redirect if not authorized
 
 # Logout view
 def logout_view(request):

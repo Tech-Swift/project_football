@@ -1,0 +1,52 @@
+/* =========================
+   Footer Styling (Updated)
+   ========================= */
+.site-footer {
+    background-color: var(--primary-color);  /* Soft cyan background */
+    color: #fff;
+    padding: 2rem;
+    text-align: center;
+    border-top: 3px solid var(--secondary-color);
+    position: relative;
+    margin-top: auto;  /* Ensures the footer stays at the bottom of the page */
+}
+
+.site-footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.site-footer p {
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.footer-social {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-social a {
+    color: #ffffff;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+.footer-social a:hover {
+    color: var(--secondary-color);  /* Hover effect */
+}
+
+@media (max-width: 768px) {
+    .site-footer .container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
+}

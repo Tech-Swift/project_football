@@ -87,17 +87,6 @@ staticfiles/
 __pycache__/
 *.cpython-*-*-*.pyc
 
-# Static files
-static/
-static/css/
-static/images/
-static/js/
-
-# Templates
-templates/
-templates/accounts/
-templates/components/
-
 # Database files
 db.sqlite3
 

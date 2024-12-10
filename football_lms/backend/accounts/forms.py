@@ -1,6 +1,6 @@
 from django import forms
-from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
 from .models import CustomUser
 
 class UserRegisterForm(forms.ModelForm):
@@ -13,6 +13,7 @@ class UserRegisterForm(forms.ModelForm):
         label="Confirm Password",
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password'}),
     )
+
     ROLE_CHOICES = [
         ('admin', 'Admin'),
         ('coach', 'Coach'),
@@ -48,14 +49,20 @@ class UserRegisterForm(forms.ModelForm):
             raise ValidationError("Passwords do not match.")
         return password2
 
-    # Override the save method to hash the password
     def save(self, commit=True):
         user = super().save(commit=False)
-        # Hash the password before saving
         user.set_password(self.cleaned_data['password1'])
+        
         if commit:
             user.save()
+
+        # Assign role based on the selected role
+        role = self.cleaned_data['role']
+        group = Group.objects.get(name=role.capitalize())  # Ensure the group names are capitalized
+        user.groups.add(group)
+
         return user
+
 
 class UserLoginForm(forms.Form):
     username_or_email = forms.CharField(label='Username or Email', max_length=100)

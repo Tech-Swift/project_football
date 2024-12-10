@@ -1,0 +1,17 @@
+{% load static %}
+
+<section class="hero">
+    <div class="container text-center">
+        <!-- Image tag -->
+        <img src="{% static 'images/hero-image.jpg' %}" alt="Hero Image" class="hero-image">
+        
+        <h1 class="hero-title">Welcome to Football LMS</h1>
+        <p class="hero-description">
+            Simplify the management of your football teams, matches, and player profiles effortlessly.
+        </p>
+        <div class="hero-actions">
+            <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="{% url 'accounts:login' %}" class="btn btn-secondary btn-lg">Log In</a>
+        </div>
+    </div>
+</section>

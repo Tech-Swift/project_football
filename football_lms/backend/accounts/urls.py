@@ -6,6 +6,11 @@ from .views import CustomUserViewSet
 app_name = 'accounts'  # Set the app_name for the namespace
 
 urlpatterns = [
+     # Dashboard Views
+    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('coach/dashboard/', views.coach_dashboard, name='coach_dashboard'),
+    path('staff/dashboard/', views.staff_dashboard, name='staff_dashboard'),
+
     # Home page route
     path('', views.home, name='home'),
 
@@ -18,7 +23,7 @@ urlpatterns = [
     path('profile/<int:user_id>/edit/', views.edit_profile, name='edit_profile'),    
 
 
-# Logout route
+    # Logout route
     path('logout/', views.logout_view, name='logout'),  # Define the logout URL
 
     # JWT token endpoints for authentication

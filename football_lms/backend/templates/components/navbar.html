@@ -1,0 +1,32 @@
+{% load custom_filters %}  <!-- Load the custom filter -->
+
+<nav class="navbar">
+    <ul class="navbar-menu">
+        <!-- Home link -->
+        <li><a href="{% url 'accounts:home' %}" class="nav-link">Home</a></li>
+
+        {% if user.is_authenticated %}
+            <!-- Welcome message for authenticated users -->
+            <p>Welcome, {{ user.username }}</p>
+
+            <!-- Profile link -->
+            <li><a href="{% url 'accounts:profile' user_id=user.id %}" class="nav-link">Profile</a></li>
+
+            <!-- Dashboard links based on user role -->
+            {% if user|is_in_group:"Admin" %}
+                <li><a href="{% url 'accounts:admin_dashboard' %}" class="nav-link">Admin Dashboard</a></li>
+            {% elif user|is_in_group:"Coach" %}
+                <li><a href="{% url 'accounts:coach_dashboard' %}" class="nav-link">Coach Dashboard</a></li>
+            {% elif user|is_in_group:"Staff" %}
+                <li><a href="{% url 'accounts:staff_dashboard' %}" class="nav-link">Staff Dashboard</a></li>
+            {% endif %}
+
+            <!-- Logout link -->
+            <li><a href="{% url 'accounts:logout' %}" class="nav-link nav-link--logout">Logout</a></li>
+        {% else %}
+            <!-- Login and Register links for unauthenticated users -->
+            <li><a href="{% url 'accounts:login' %}" class="nav-link">Login</a></li>
+            <li><a href="{% url 'accounts:register' %}" class="nav-link">Register</a></li>
+        {% endif %}
+    </ul>
+</nav>
