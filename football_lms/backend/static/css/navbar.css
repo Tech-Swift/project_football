@@ -1,0 +1,44 @@
+/* Navbar */
+.navbar {
+    margin-top: 0.5rem;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover, .nav-link:focus {
+    background-color: #002a80;
+    color: #ffcc00;
+}
+
+.nav-link--logout {
+    background: #ff4444;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Active states */
+.nav-link--logout:hover, .nav-link--logout:focus {
+    background: #cc0000;
+}
+
+/* Accessibility */
+.nav-link:focus {
+    outline: 2px solid #ffcc00;
+    outline-offset: 2px;
+}

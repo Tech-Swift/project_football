@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',  # Custom app
+    'players',
     'rest_framework',  # Django REST Framework
     'rest_framework_simplejwt',  # JWT support
 ]

@@ -1,0 +1,26 @@
+/* Header */
+.site-header {
+    background: linear-gradient(90deg, #003399, #0044cc);
+    color: #fff;
+    padding: 1.5rem 0;
+    border-bottom: 3px solid #002a80;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+}
+
+.logo a:hover {
+    color: #ffcc00;
+}
+
+/* Accessibility */
+.logo a:focus {
+    outline: 2px solid #ffcc00;
+    outline-offset: 2px;
+}

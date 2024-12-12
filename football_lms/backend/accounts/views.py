@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Assuming CustomUser is your user model
-from django.contrib.auth import get_user_model
 from .serializers import CustomUserSerializer
 from .permissions import IsAdminOrCoachOrStaff  # Assuming this permission is defined elsewhere
 from .forms import UserRegisterForm, UserLoginForm
@@ -38,7 +37,7 @@ def register(request):
         'Please correct the errors in the form'
     )
 
-# Login view (Fixed)
+# Login view
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('accounts:profile', user_id=request.user.id)  # If already logged in, go to profile
@@ -105,8 +104,9 @@ def edit_profile(request, user_id):
 # CustomUser view set (for API purposes)
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from .serializers import CustomUserSerializer
 from .permissions import IsAdminOrCoachOrStaff  # Assuming this permission is defined elsewhere
 
@@ -148,3 +148,19 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         data = serializer.data
         data.update(additional_info)
         return Response(data)
+
+# Role-Specific Dashboards
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminOrCoachOrStaff])
+def admin_dashboard(request):
+    return Response({'message': 'Welcome to the admin dashboard!'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminOrCoachOrStaff])
+def coach_dashboard(request):
+    return Response({'message': 'Welcome to the coach dashboard!'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminOrCoachOrStaff])
+def staff_dashboard(request):
+    return Response({'message': 'Welcome to the staff dashboard!'})

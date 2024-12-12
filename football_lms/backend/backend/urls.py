@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls')),  # Corrected include without namespace
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    path('api/players/', include('players.urls')),
     path('', home, name='home'),  # Updated to link directly to the home view
 ]
 

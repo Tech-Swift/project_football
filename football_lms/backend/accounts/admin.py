@@ -8,11 +8,27 @@ from .models import CustomUser
 def assign_permissions(sender, **kwargs):
     user_content_type = ContentType.objects.get_for_model(CustomUser)
 
-    # Get permissions for the CustomUser model
-    view_permission = Permission.objects.get(codename='view_user', content_type=user_content_type)
-    add_permission = Permission.objects.get(codename='add_user', content_type=user_content_type)
-    change_permission = Permission.objects.get(codename='change_user', content_type=user_content_type)
-    delete_permission = Permission.objects.get(codename='delete_user', content_type=user_content_type)
+    # Create permissions if they don't exist
+    view_permission, created = Permission.objects.get_or_create(
+        codename='view_user',
+        name='Can view user',
+        content_type=user_content_type,
+    )
+    add_permission, created = Permission.objects.get_or_create(
+        codename='add_user',
+        name='Can add user',
+        content_type=user_content_type,
+    )
+    change_permission, created = Permission.objects.get_or_create(
+        codename='change_user',
+        name='Can change user',
+        content_type=user_content_type,
+    )
+    delete_permission, created = Permission.objects.get_or_create(
+        codename='delete_user',
+        name='Can delete user',
+        content_type=user_content_type,
+    )
 
     # Create groups and assign permissions
     admin_group, created = Group.objects.get_or_create(name='Admin')
