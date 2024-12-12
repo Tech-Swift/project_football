@@ -1,30 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Football LMS</title>
-    {% load static %} <!-- Load static template tag -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Corrected static path -->
-</head>
-<body>
-    <header>
-        <div class="container">
-            <nav>
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'accounts:login' %}">Login</a></li> <!-- Updated to use the namespace 'accounts' -->
-                    <li><a href="{% url 'accounts:register' %}">Register</a></li>
-                </ul>
-            </nav>
-            <div class="hero">
-                <h1>Welcome to Football LMS</h1>
-                <p>Manage your football team efficiently and effectively.</p>
-                <a href="{% url 'accounts:register' %}" class="btn">Get Started</a>
-            </div>
-        </div>
-    </header>
+{% extends 'base.html' %}
 
+{% block title %}Home - Football LMS{% endblock %}
+
+{% block content %}
     <main>
         <section class="features">
             <div class="container">
@@ -66,25 +44,4 @@
             </div>
         </section>
     </main>
-
-    <footer>
-        <div class="container">
-            <div class="social-links">
-                <ul>
-                    <li><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                    <li><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></li>
-                </ul>
-            </div>
-            <div class="footer-info">
-                <p>&copy; 2024 Football LMS. All rights reserved.</p>
-                <p>Built with <i class="fas fa-heart"></i> by [Your Name]</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- External JS for Font Awesome (if not included via static CSS) -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</body>
-</html>
+{% endblock %}

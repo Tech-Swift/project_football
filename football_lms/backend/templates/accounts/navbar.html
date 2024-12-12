@@ -1,0 +1,13 @@
+<nav class="navbar">
+    <ul class="navbar-menu">
+        {% if authenticated %}
+            <li><a href="{{ profile_url }}" class="nav-link">Profile</a></li>
+            <li><a href="{{ logout_url }}" class="nav-link nav-link--logout">Logout</a></li>
+            <li><a href="{{ dashboard_url }}" class="nav-link">Dashboard</a></li>
+            <li><a href="{{ players_url }}" class="nav-link">Players</a></li>
+        {% else %}
+            <li><a href="{{ login_url }}" class="nav-link">Login</a></li>
+            <li><a href="{{ register_url }}" class="nav-link">Register</a></li>
+        {% endif %}
+    </ul>
+</nav>
