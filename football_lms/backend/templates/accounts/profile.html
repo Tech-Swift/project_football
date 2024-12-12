@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+{% load static %}  <!-- Add this line to load static files -->
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header text-center">
+            <h3>Your Profile</h3>
+          </div>
+          <div class="card-body">
+            <!-- Profile Picture -->
+            <div class="text-center mb-4">
+              {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+              {% else %}
+                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+              {% endif %}
+            </div>
+
+            <!-- User Info -->
+            <div class="mb-3">
+              <strong>Username:</strong>
+              <p>{{ user.username }}</p>
+            </div>
+            <div class="mb-3">
+              <strong>Email:</strong>
+              <p>{{ user.email }}</p>
+            </div>
+
+            <!-- Optional User Fields -->
+            {% if user.first_name %}
+              <div class="mb-3">
+                <strong>First Name:</strong>
+                <p>{{ user.first_name }}</p>
+              </div>
+            {% endif %}
+            {% if user.last_name %}
+              <div class="mb-3">
+                <strong>Last Name:</strong>
+                <p>{{ user.last_name }}</p>
+              </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="text-center">
+              <a href="{% url 'accounts:edit_profile' user.id %}" class="btn btn-primary mb-3">Edit Profile</a>
+              <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
