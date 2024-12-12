@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Football LMS{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div id="navbar">
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'accounts:profile' user.id %}">Profile</a></li>
+                    <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+                    {% if user.groups.exists %}
+                        {% for group in user.groups.all %}
+                            {% if group.name == 'Admin' %}
+                                <li><a href="{% url 'accounts:admin_dashboard' user.id %}">Admin Dashboard</a></li>
+                            {% elif group.name == 'Coach' %}
+                                <li><a href="{% url 'accounts:coach_dashboard' user.id %}">Coach Dashboard</a></li>
+                            {% elif group.name == 'Staff' %}
+                                <li><a href="{% url 'accounts:staff_dashboard' user.id %}">Staff Dashboard</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <li><a href="{% url 'players:player_list' %}">Players</a></li>  <!-- Players URL included here -->
+                {% else %}
+                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                    <li><a href="{% url 'accounts:register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Football LMS. All rights reserved.</p>
+    </footer>
+</body>
+</html>

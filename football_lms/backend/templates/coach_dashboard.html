@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="coach-dashboard">
+        <h1>Welcome Coach {{ request.user.username }}</h1>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h2>Managed Teams</h2>
+                <p>{{ managed_teams }}</p>
+            </div>
+            <div class="stat-card">
+                <h2>Upcoming Matches</h2>
+                <p>{{ upcoming_matches }}</p>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="{% url 'accounts:coach_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'accounts:profile' request.user.id %}">Profile</a></li>
+                <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
