@@ -1,0 +1,87 @@
+/* General styles for Login Section */
+.login-section {
+    padding: 2rem 0;
+    background-color: #8c8c8c; /* Gray background for contrast */
+    color: #f4f4f4; /* Light text color */
+    text-align: center;
+    border-radius: 10px; /* Rounded corners for the section */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    width: 60%;
+    margin: 0 auto;
+}
+
+/* Title Styling for Login */
+.login-section h2 {
+    margin-bottom: 30px; /* Space between the title and form */
+    font-size: 2rem; /* Font size of the title */
+    font-weight: bold; /* Make the title bold */
+    color: #f4f4f4; /* White color for better contrast */
+    text-align: center; /* Ensure title is centered */
+}
+
+/* Form Styling */
+.login-section form {
+    background-color: #d3d3d3; /* Softer gray background for the form */
+    padding: 20px;
+    border-radius: 10px;
+    color: #333;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Input Styling */
+.login-section form input,
+.login-section form select,
+.login-section form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+/* Focused Input Styling */
+.login-section form input:focus,
+.login-section form select:focus,
+.login-section form textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Submit Button Styling */
+.login-section form button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Hover Effect for Submit Button */
+.login-section form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Alternative Options Button */
+.alternative-options {
+    margin-top: 20px;
+}
+
+.alternative-options .btn-secondary {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+.alternative-options .btn-secondary:hover {
+    background-color: #5a6268;
+    color: #ffffff;
+}

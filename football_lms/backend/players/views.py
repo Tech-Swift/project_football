@@ -13,7 +13,7 @@ class PlayerDetailView(DetailView):
 
 class PlayerCreateView(CreateView):
     model = Player
-    fields = ['name', 'position', 'team', 'age', 'coach']  # Specify fields here
+    fields = ['name', 'position', 'team', 'age', 'coach', 'picture']  # Specify fields here
     template_name = 'players/player_form.html'
 
     def get_success_url(self):
@@ -21,7 +21,7 @@ class PlayerCreateView(CreateView):
 
 class PlayerUpdateView(UpdateView):
     model = Player
-    fields = ['name', 'position', 'team', 'age']  # Specify only the relevant fields here
+    fields = ['name', 'position', 'team', 'age', 'picture']  # Specify only the relevant fields here
     template_name = 'players/player_form.html'
 
 class PlayerDeleteView(DeleteView):

@@ -1,55 +1,46 @@
 {% load static %}
-{% load navbar_tags %}  <!-- Load custom navbar tag -->
-
-<!DOCTYPE html>
+{% load navbar_tags %}  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Football LMS{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Corrected static path -->
+    <title>{% block title %}Football LMS{% endblock %}</title><link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/hero.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profiler.css' %}">
+
+
+
 </head>
 <body>
-    <!-- Dynamically render navbar -->
     <div id="navbar">
         {% render_navbar user %}
     </div>
 
-    <!-- Header section -->
-    <header>
-        <div class="container">
-            <div class="hero">
-                <h1>Welcome to Football LMS</h1>
-                <p>Manage your football team efficiently and effectively.</p>
-                <a href="{% url 'accounts:register' %}" class="btn">Get Started</a>
+    {% if request.path == '/' %}
+        <header>
+            <div class="container">
+                <div class="hero">
+                    <h1>Welcome to Football LMS</h1>
+                    <p>Manage your football team efficiently and effectively.</p>
+                    <a href="{% url 'accounts:register' %}" class="btn">Get Started</a>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
+    {% endif %}
 
-    <!-- Content section -->
     <div id="content">
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="social-links">
-                <ul>
-                    <li><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                    <li><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></li>
-                </ul>
-            </div>
-            <div class="footer-info">
-                <p>&copy; 2024 Football LMS. All rights reserved.</p>
-                <p>Built with <i class="fas fa-heart"></i> by [Your Name]</p>
-            </div>
-        </div>
-    </footer>
+    {% include 'components/footer.html' %}
 
-    <!-- External JS for Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
-</html>
+</html>:

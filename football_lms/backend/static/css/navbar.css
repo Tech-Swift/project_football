@@ -1,15 +1,39 @@
 /* Navbar */
 .navbar {
-    margin-top: 0.5rem;
+    position: fixed; /* Fixed at the top */
+    top: 0;
+    width: 100%; /* Ensures the navbar spans the full width */
+    background-color: #023e0e; /* Background color */
+    padding: 10px 20px; /* Adds padding to the navbar */
+    z-index: 1000; /* Keeps the navbar above other elements */
+    display: flex;
+    justify-content: space-between; /* Space between the logo and the menu */
+    align-items: center; /* Vertically centers the items */
 }
 
+/* Logo on the left */
+.navbar-brand {
+    color: #fff;
+    font-size: 1.8rem; /* Logo font size */
+    font-weight: bold;
+    text-decoration: none; /* Removes underline */
+    margin-right: auto;
+}
+
+.navbar-brand:hover, .navbar-brand:focus {
+    color: #ffcc00; /* Hover/focus color */
+}
+
+/* Navbar menu on the right */
 .navbar-menu {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
-    justify-content: center;
+    gap: 1.5rem; /* Space between links */
+    margin: 0;
+    padding: 0;
 }
 
+/* Individual nav link */
 .nav-link {
     text-decoration: none;
     color: #fff;
@@ -24,6 +48,7 @@
     color: #ffcc00;
 }
 
+/* Logout link styling */
 .nav-link--logout {
     background: #ff4444;
     padding: 0.5rem 1rem;
@@ -37,7 +62,7 @@
     background: #cc0000;
 }
 
-/* Accessibility */
+/* Accessibility for focus states */
 .nav-link:focus {
     outline: 2px solid #ffcc00;
     outline-offset: 2px;

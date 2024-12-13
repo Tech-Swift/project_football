@@ -8,6 +8,7 @@ class Player(models.Model):
     team = models.CharField(max_length=100)
     position = models.CharField(max_length=50, null=True, blank=True)
     coach = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='players')
+    picture = models.ImageField(upload_to='player_pics/', null=True, blank=True)
 
     def __str__(self):
         return self.name

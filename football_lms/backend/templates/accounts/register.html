@@ -7,18 +7,26 @@
 {% block content %}
 <section class="register-section">
     <div class="container">
-        <div class="image-container">
-            <img src="{% static 'images/register-image.jpg' %}" alt="Register Image" class="register-image">
-        </div>
-        <h2>Register</h2>
-        <form method="post" action="{% url 'accounts:register' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-        <div class="alternative-options">
-            <a href="{% url 'accounts:login' %}" class="btn btn-secondary">Already have an account? Log In</a>
+        <div class="row align-items-center">
+            <!-- Image Column -->
+            <div class="col-sm-5 image-container">
+                <img src="{% static 'images/register-image.jpg' %}" alt="Register Image"
+                     class="img-fluid register-image">
+            </div>
+            <!-- Form Column -->
+            <div class="col-sm-5">
+                <h2 class="text-center">Register</h2>
+                <form method="post" action="{% url 'accounts:register' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
+                </form>
+                <div class="alternative-options mt-3 text-center">
+                    <a href="{% url 'accounts:login' %}" class="btn btn-secondary">Already have an account? Log In</a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
 {% endblock %}

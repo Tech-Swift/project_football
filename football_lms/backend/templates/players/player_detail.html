@@ -6,6 +6,7 @@
   <p>Team: {{ player.team }}</p>
   <p>Age: {{ player.age }}</p>
   <p>Height: {{ player.height }}</p>
+    <p><img "{{ player.picture }}"></p>
   <a href="{% url 'players:player_update' player.pk %}">Edit</a>
   <form method="post" action="{% url 'players:player_delete' player.pk %}" style="display:inline;">
     {% csrf_token %}

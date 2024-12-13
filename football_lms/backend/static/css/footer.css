@@ -1,33 +1,62 @@
-/* Footer */
-.site-footer {
-    background: #222;
-    color: #ccc;
-    padding: 2rem 0;
-    text-align: center;
-    border-top: 3px solid #444;
+/* Reset some default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.footer-links {
-    list-style: none;
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Container for social links */
+.container{
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
+    padding: 20px;
+    flex-grow: 1; /* Ensures this part takes available space */
 }
 
-.footer-link {
+/* Style for social links */
+.social-links ul {
+    list-style: none;
+    display: flex;
+}
+
+.social-links li {
+    margin-right: 15px;
+}
+
+.social-links a {
+    color: #333;
     text-decoration: none;
-    color: #ccc;
-    font-weight: bold;
-    transition: color 0.3s ease;
+    font-size: 20px;
 }
 
-.footer-link:hover {
-    color: #ffcc00;
+/* Footer styling */
+.footer-info {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    width: 100%; /* Ensures the footer stretches fully from left to right */
+    position: relative;
+    bottom: 0; /* Places it at the bottom of the page */
 }
 
-/* Accessibility */
-.footer-link:focus, .footer-link:hover {
-    outline: 2px solid #ffcc00;
-    outline-offset: 2px;
+/* Optional: If you want to ensure the footer stays at the bottom of the viewport */
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
+
+.footer-info {
+    margin-top: auto; /* Ensures the footer pushes to the bottom */
+}
+
